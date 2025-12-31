@@ -1,0 +1,27 @@
+
+services:
+  backend:
+    build: ./backend
+    container_name: ai-docent-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/app:/backend/app
+    env_file:
+      - ./backend/app/.env.local
+    working_dir: /backend
+
+  frontend:
+    build: ./frontend-mobile
+    container_name: ai-docent-frontend
+    ports:
+      - "8081:8081"
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    volumes:
+      - ./frontend-mobile:/app
+    environment:
+      - EXPO_PUBLIC_API_BASE=http://backend:8000
+    depends_on:
+      - backend
