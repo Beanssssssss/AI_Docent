@@ -103,10 +103,41 @@ npm install
 2. 환경변수 설정
 `.env.local` 파일을 생성:
 ```env
+# API 주소 (일반 사용자용, 이미지 검색 등)
 NEXT_PUBLIC_API_BASE=http://localhost:8000
+
+# Supabase 설정 (관리자 페이지용)
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-3. 개발 서버 실행
+**참고:** 관리자 페이지는 Supabase를 직접 호출하므로 `NEXT_PUBLIC_SUPABASE_URL`과 `NEXT_PUBLIC_SUPABASE_ANON_KEY`가 필요합니다.
+
+**Supabase Auth 설정:**
+1. Supabase 대시보드에서 Authentication 활성화
+2. Authentication > Providers > Email에서 Email 인증 활성화
+3. 관리자 계정 생성:
+   - Authentication > Users > Add user
+   - 또는 앱에서 회원가입 후 Supabase 대시보드에서 관리자 권한 부여
+4. 로그인 페이지(`/login`)에서 생성한 계정으로 로그인
+
+**Supabase Storage 설정 (작품 이미지 업로드용):**
+1. Supabase 대시보드에서 Storage 활성화
+2. Storage > Create bucket:
+   - Bucket name: `AI_Docent`
+   - Public bucket: **체크** (이미지 URL 접근을 위해 필요)
+3. Storage > Policies에서 업로드 권한 설정:
+   - `AI_Docent` 버킷에 대해 인증된 사용자가 업로드할 수 있도록 정책 추가
+   - 또는 Public access 정책 설정 (관리자만 접근 가능하도록 권장)
+4. 이미지 저장 경로: `Artworks/{작가명}/{파일명}`
+   - 예: `AI_Docent` 버킷 내 `Artworks/김철수/1234567890.jpg`
+
+3. 의존성 설치 (Supabase 클라이언트 포함)
+```bash
+npm install
+```
+
+4. 개발 서버 실행
 ```bash
 npm run dev
 ```

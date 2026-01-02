@@ -1,34 +1,21 @@
-"use client";
+import type { Metadata } from "next";
+import "./globals.css";
+import AuthGuard from "@/components/AuthGuard";
 
-import { useState } from "react";
-import GallerySelector from "@/components/GallerySelector";
-import ExhibitionSelector from "@/components/ExhibitionSelector";
-import BottomNav from "@/components/BottomNav";
+export const metadata: Metadata = {
+  title: "AI Docent 관리자",
+  description: "AI Docent 데이터베이스 관리 시스템",
+};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [galleryId, setGalleryId] = useState<number | null>(null);
-  const [exhibitionId, setExhibitionId] = useState<number | null>(null);
-
   return (
-    <html>
-      <body className="h-screen flex flex-col">
-        <header className="p-3 border-b bg-white">
-          <GallerySelector onChange={setGalleryId} />
-          <ExhibitionSelector
-            galleryId={galleryId}
-            onChange={setExhibitionId}
-          />
-        </header>
-
-        <main className="flex-1 overflow-y-auto bg-gray-50">
-          {children}
-        </main>
-
-        <BottomNav />
+    <html lang="ko">
+      <body className="h-screen flex bg-gray-50">
+        <AuthGuard>{children}</AuthGuard>
       </body>
     </html>
   );
