@@ -1,5 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import { useState, useEffect } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useOnboardingStore } from "@/store/onboarding.store";
 import { fetchGalleries, Gallery } from "@/services/gallery";
 import { fetchExhibitions, Exhibition } from "@/services/exhibition";
@@ -9,6 +10,7 @@ export default function ExhibitionHeader() {
   const exhibitionId = useOnboardingStore((s) => s.exhibition);
   const setGallery = useOnboardingStore((s) => s.setGallery);
   const setExhibition = useOnboardingStore((s) => s.setExhibition);
+  const clearExhibition = useOnboardingStore((s) => s.clearExhibition);
   
   const [activeTab, setActiveTab] = useState<"gallery" | "exhibition">("gallery");
   const [galleries, setGalleries] = useState<Gallery[]>([]);
@@ -53,36 +55,39 @@ export default function ExhibitionHeader() {
   const selectedExhibition = exhibitions.find(e => e.id === exhibitionId);
 
   return (
-    <View style={{ backgroundColor: "#fff", borderBottomWidth: 1, borderBottomColor: "#e5e5e5" }}>
-      {/* 현재 선택된 갤러리/전시 표시 */}
-      <Pressable
-        onPress={() => setShowList(!showList)}
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          paddingHorizontal: 16,
-          paddingVertical: 12,
-        }}
-      >
+    <SafeAreaView edges={["top"]} style={{ backgroundColor: "#fff" }}>
+      <View style={{ backgroundColor: "#fff", borderBottomWidth: 1, borderBottomColor: "#e5e5e5" }}>
+        {/* 현재 선택된 갤러리/전시 표시 */}
+        <Pressable
+          onPress={() => setShowList(!showList)}
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+          }}
+        >
         <View style={{ flex: 1 }}>
             <Text style={{ fontSize: 12, color: "#666", marginBottom: 4 }}>
-                현재 전시
+                {selectedExhibition ? "현재 전시" : selectedGallery ? "갤러리 선택됨" : "갤러리 미선택"}
             </Text>
 
             <Text
                 style={{ fontSize: 16, fontWeight: "600", color: "#000" }}
                 numberOfLines={1}
             >
-                {selectedGallery?.name || "갤러리 미선택"}
+                {selectedExhibition?.name || selectedGallery?.name || "갤러리 미선택"}
             </Text>
 
-            <Text
-                style={{ fontSize: 14, color: "#555", marginTop: 2 }}
-                numberOfLines={1}
-            >
-                {selectedExhibition?.name || "전시 미선택"}
-            </Text>
+            {selectedExhibition && (
+              <Text
+                  style={{ fontSize: 14, color: "#555", marginTop: 2 }}
+                  numberOfLines={1}
+              >
+                  {selectedGallery?.name}
+              </Text>
+            )}
             </View>
         <Text style={{ fontSize: 20, color: "#666" }}>
           {showList ? "▲" : "▼"}
@@ -147,6 +152,10 @@ export default function ExhibitionHeader() {
                     onPress={() => {
                       setSelectedGalleryId(gallery.id);
                       setGallery(gallery.id);
+                      // 갤러리 재선택 시 전시 선택 취소
+                      if (gallery.id !== galleryId) {
+                        clearExhibition();
+                      }
                       setActiveTab("exhibition");
                     }}
                     style={{
@@ -190,6 +199,7 @@ export default function ExhibitionHeader() {
           </View>
         </View>
       )}
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }

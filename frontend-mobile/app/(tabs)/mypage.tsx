@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 
 export default function MyPageScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 24 }}>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 24, paddingBottom: 120 }}>
       <Text style={{ fontSize: 20, fontWeight: "600", marginBottom: 12 }}>
         마이페이지
       </Text>

@@ -17,7 +17,7 @@ export default function ChatScreen() {
         {/* 채팅 메시지 영역 */}
         <ScrollView 
           style={{ flex: 1 }} 
-          contentContainerStyle={{ padding: 16 }}
+          contentContainerStyle={{ padding: 16, paddingBottom: 120 }}
         >
           <View style={{ alignItems: "center", justifyContent: "center", flex: 1, paddingVertical: 40 }}>
             <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 8 }}>
@@ -33,7 +33,8 @@ export default function ChatScreen() {
         <View style={{ 
           flexDirection: "row", 
           alignItems: "center", 
-          padding: 12, 
+          padding: 12,
+          paddingBottom: 100, // FloatingTabBar를 위한 여백
           borderTopWidth: 1, 
           borderTopColor: "#e5e5e5",
           backgroundColor: "#fff"

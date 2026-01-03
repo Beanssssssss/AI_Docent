@@ -8,7 +8,8 @@ type State = {
   setAge: (age: string) => void;
   setAesthetic: (level: string) => void;
   setGallery: (galleryId: number) => void;
-  setExhibition: (exhibitionId: number) => void;
+  setExhibition: (exhibitionId: number | undefined) => void;
+  clearExhibition: () => void;
 };
 
 export const useOnboardingStore = create<State>((set) => ({
@@ -20,4 +21,5 @@ export const useOnboardingStore = create<State>((set) => ({
   setAesthetic: (level) => set({ aesthetic: level }),
   setGallery: (galleryId) => set({ gallery: galleryId }),
   setExhibition: (exhibitionId) => set({ exhibition: exhibitionId }),
+  clearExhibition: () => set({ exhibition: undefined }),
 }));
