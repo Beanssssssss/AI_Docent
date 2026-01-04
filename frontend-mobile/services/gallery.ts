@@ -1,4 +1,4 @@
-import { API_BASE } from "./api";
+import { getApiBaseUrl } from "./api";
 
 export type Gallery = {
   id: number;
@@ -6,6 +6,7 @@ export type Gallery = {
 };
 
 export async function fetchGalleries() {
+    const API_BASE = getApiBaseUrl();
     console.log("API_BASE =", API_BASE);
     const url = `${API_BASE}/galleries`;
     console.log("fetching:", url);

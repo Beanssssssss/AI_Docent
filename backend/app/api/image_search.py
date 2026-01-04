@@ -21,7 +21,7 @@ async def image_search(
     results = search_similar_artworks_in_exhibition(
         exhibition_id=exhibition_id,
         query_embedding=query_embedding,
-        top_k=5
+        top_k=3
     )
 
     return results

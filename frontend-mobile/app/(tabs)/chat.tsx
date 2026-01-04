@@ -2,10 +2,16 @@ import { View, Text, TextInput, Pressable, ScrollView, KeyboardAvoidingView, Pla
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useOnboardingStore } from "@/store/onboarding.store";
 
 export default function ChatScreen() {
   const router = useRouter();
   const [message, setMessage] = useState("");
+  const galleryId = useOnboardingStore((s) => s.gallery);
+  const exhibitionId = useOnboardingStore((s) => s.exhibition);
+  
+  // 전시가 선택되지 않았는지 확인
+  const isExhibitionSelected = exhibitionId !== undefined;
 
   return (
     <KeyboardAvoidingView 
@@ -20,12 +26,26 @@ export default function ChatScreen() {
           contentContainerStyle={{ padding: 16, paddingBottom: 120 }}
         >
           <View style={{ alignItems: "center", justifyContent: "center", flex: 1, paddingVertical: 40 }}>
-            <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 8 }}>
-              AI 도슨트와 대화하기
-            </Text>
-            <Text style={{ color: "#666", textAlign: "center" }}>
-              궁금한 점을 물어보세요
-            </Text>
+            {isExhibitionSelected ? (
+              <>
+                <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 8 }}>
+                  AI 도슨트와 대화하기
+                </Text>
+                <Text style={{ color: "#666", textAlign: "center" }}>
+                  궁금한 점을 물어보세요
+                </Text>
+              </>
+            ) : (
+              <>
+                <MaterialIcons name="info-outline" size={48} color="#FF9500" style={{ marginBottom: 16 }} />
+                <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 8, color: "#FF9500" }}>
+                  전시를 선택하세요
+                </Text>
+                <Text style={{ color: "#666", textAlign: "center", paddingHorizontal: 20 }}>
+                  채팅 기능을 사용하려면 먼저 전시를 선택해주세요.
+                </Text>
+              </>
+            )}
           </View>
         </ScrollView>
 
@@ -54,22 +74,23 @@ export default function ChatScreen() {
             style={{
               flex: 1,
               borderWidth: 1,
-              borderColor: "#e5e5e5",
+              borderColor: isExhibitionSelected ? "#e5e5e5" : "#e0e0e0",
               borderRadius: 20,
               paddingHorizontal: 16,
               paddingVertical: 10,
               fontSize: 16,
-              backgroundColor: "#f5f5f5",
+              backgroundColor: isExhibitionSelected ? "#f5f5f5" : "#f0f0f0",
             }}
-            placeholder="메시지를 입력하세요..."
+            placeholder={isExhibitionSelected ? "메시지를 입력하세요..." : "전시를 선택하세요"}
             value={message}
             onChangeText={setMessage}
             multiline
+            editable={isExhibitionSelected}
           />
           
           <Pressable
             onPress={() => {
-              if (message.trim()) {
+              if (isExhibitionSelected && message.trim()) {
                 // 메시지 전송 로직
                 setMessage("");
               }
@@ -78,12 +99,14 @@ export default function ChatScreen() {
             style={{
               marginLeft: 8,
               padding: 8,
+              opacity: isExhibitionSelected && message.trim() ? 1 : 0.5,
             }}
+            disabled={!isExhibitionSelected || !message.trim()}
           >
             <MaterialIcons 
               name="send" 
               size={24} 
-              color={message.trim() ? "#007AFF" : "#ccc"} 
+              color={isExhibitionSelected && message.trim() ? "#007AFF" : "#ccc"} 
             />
           </Pressable>
         </View>

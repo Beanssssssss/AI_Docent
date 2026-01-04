@@ -128,7 +128,7 @@ export default function GallerySelect() {
             key={gallery.id}
             onPress={() => {
               setGallery(gallery.id);
-              router.push("/(onboarding)/exhibitions");
+              router.push("/(tabs)");
             }}
             hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
             style={{

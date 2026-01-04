@@ -1,4 +1,4 @@
-import { API_BASE } from "./api";
+import { getApiBaseUrl } from "./api";
 
 export type Exhibition = {
   id: number;
@@ -9,6 +9,7 @@ export type Exhibition = {
 };
 
 export async function fetchExhibitions(galleryId: number): Promise<Exhibition[]> {
+  const API_BASE = getApiBaseUrl();
   const url = `${API_BASE}/exhibitions?gallery_id=${galleryId}`;
   console.log("fetching exhibitions:", url);
 
